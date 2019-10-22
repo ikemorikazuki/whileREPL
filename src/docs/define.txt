@@ -1,0 +1,33 @@
+
+// 再帰の形を変換して、繰り返しの形にする。
+
+// 和、差、積
+<exprssion>    ::= <multiple> ("+" <multiple> | "-" <multiple>)*
+<multiple>     ::= <primary> ("*" <primary>)*
+<primary>      ::= <num> | "(" <exprssion> ")"
+
+// bool式
+<boolean expression>      ::= <not boolean term> ("&&" <not boolean term>)*
+<not boolean term>  :: = ["!"] <factor> 
+<factor>            ::= <boolean literal> | "(" <boolean exprssion> ")" 
+<boolean literal>   ::= "true" | "false" | <expression> "=" <expression> | <expression> "<=" <expression>
+
+/////////
+<boolean expression> ::= true 
+                        | false 
+                        | <expression> "=" <expression> 
+                        | <expression> "<=" <expression> 
+                        | "!" <boolran term>
+                        | <boolean term> "&&" <boolean term>
+<boolean term> ::= <boolean expression>
+
+// ステートメント
+<Statement> ::= "var" <identifer> ":=" <exprssion>
+                | "skip" 
+                | "if" <boolean expression> "then" <block Statement>  "else"  <block Statement> "end" 
+                | "while" <boolan exprssion>  "do" <block Statement> "end"
+<block Statement> ::= (<Statement> ";")+ 
+
+
+// 変数
+<identifer> ::= 英字から始まる単語
