@@ -11,6 +11,7 @@
                         | <expression> "<=" <expression> 
                         | "!" <boolean expression> 
                         | <boolean expression> "&&" <boolean expression>
+                        | "(" <boolean expression> ")"
 
 <statement> ::= x ":=" <expression> ";" 
                         | "skip" 

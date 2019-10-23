@@ -16,6 +16,7 @@ case class EqExp(e1: Aexp, e2: Aexp)  extends Bexp
 case class LeExp(e1: Aexp, e2: Aexp)  extends Bexp // less than or equal
 case class NotExp(b: Bexp)            extends Bexp
 case class AndExp(b1: Bexp, b2: Bexp) extends Bexp
+case class BParen(b: Bexp)            extends Bexp
 
 sealed trait Stm                            extends Positional
 case class AssignStm(x: String, e: Aexp)    extends Stm

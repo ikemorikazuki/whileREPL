@@ -2,8 +2,10 @@ package whilec
 
 import lexer.WhileLexer
 import parser.WhileParser
-import lexer.WhileLexer
-import parser.WhileParser
+import lexer._
+import parser.WhileParser._
+import parser._
+import whilec.{Location, WhileParserError}
 
 object Whilec {
   def main(args: Array[String]): Unit = {
@@ -21,9 +23,19 @@ object Whilec {
       println(token)
     }
 
-    val code1  = "10 + 1 * 2;"
+    def parseBExp(tokens: Seq[WhileToken]): Either[WhileParserError, Bexp] = {
+      val reader = new WhileTokenReader(tokens)
+      bExpression(reader) match {
+        case NoSuccess(msg, next) =>
+          Left(WhileParserError(Location(next.pos.line, next.pos.column), msg))
+        case Success(result, next) => Right(result)
+      }
+    }
+
+    val code1  = "true && false"
     val tokens = WhileLexer.apply(code1).right.get
-    val ast    = WhileParser.apply(tokens)
+    val ast    = parseBExp(tokens)
     println(ast)
+
   }
 }
