@@ -1,9 +1,8 @@
 package lexer
 
 import org.scalatest._
-import scala.util.parsing.combinator.RegexParsers
 
-class HelloSpec extends FlatSpec with Matchers {
+class LexerSpec extends FlatSpec with Matchers {
 
   // 変数の字句解析
   "parse 'hoge'" should "Identifier(hoge)" in {
@@ -146,5 +145,76 @@ class HelloSpec extends FlatSpec with Matchers {
   "parse false" should "FALSE" in {
     val code = "false"
     WhileLexer.apply(code).right.get shouldBe (List(FALSE))
+  }
+
+  // 大きめのテスト
+  "big test case" should "ok" in {
+    val code = """hoge := -1;
+              | foo := (1+1);
+              | true
+              | false
+              | x := 5;
+              | y := 1;
+              | while false do 
+              | y := y * x;
+              | x := x - 1;
+              | end
+              | if false then
+              | x := 1;
+              | else 
+              | skip
+              | end""".stripMargin
+    val expect = List(
+      IDENTIFIER("hoge"),
+      ASSIGN,
+      INT(-1),
+      SEMICOLON,
+      IDENTIFIER("foo"),
+      ASSIGN,
+      LPAREN,
+      INT(1),
+      ADD,
+      INT(1),
+      RPAREN,
+      SEMICOLON,
+      TRUE,
+      FALSE,
+      IDENTIFIER("x"),
+      ASSIGN,
+      INT(5),
+      SEMICOLON,
+      IDENTIFIER("y"),
+      ASSIGN,
+      INT(1),
+      SEMICOLON,
+      WHILE,
+      FALSE,
+      DO,
+      IDENTIFIER("y"),
+      ASSIGN,
+      IDENTIFIER("y"),
+      MUL,
+      IDENTIFIER("x"),
+      SEMICOLON,
+      IDENTIFIER("x"),
+      ASSIGN,
+      IDENTIFIER("x"),
+      SUB,
+      INT(1),
+      SEMICOLON,
+      END,
+      IF,
+      FALSE,
+      THEN,
+      IDENTIFIER("x"),
+      ASSIGN,
+      INT(1),
+      SEMICOLON,
+      ELSE,
+      SKIP,
+      END
+    )
+
+    WhileLexer.apply(code).right.get shouldBe (expect)
   }
 }

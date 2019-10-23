@@ -1,0 +1,19 @@
+<expression> ::= n 
+                | x 
+                | <expression> "+" <expression> 
+                | <expression> "-" <expression> 
+                | <expression> "*" <expression>
+                | "(" <expression> ")"
+
+<boolean expression> ::= "true" 
+                        | "false" 
+                        | <expression> "=" <expression> 
+                        | <expression> "<=" <expression> 
+                        | "!" <boolean expression> 
+                        | <boolean expression> "&&" <boolean expression>
+
+<statement> ::= x ":=" <expression> ";" 
+                        | "skip" 
+                        | <statement> <statement>
+                        | "if" <boolean expression> "then" <statement> "else" <statement> "end"
+                        | "while" <boolean expression> "do" <statement> "end"

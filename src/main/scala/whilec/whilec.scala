@@ -1,6 +1,9 @@
 package whilec
 
-import lexer.WhileLexer._
+import lexer.WhileLexer
+import parser.WhileParser
+import lexer.WhileLexer
+import parser.WhileParser
 
 object Whilec {
   def main(args: Array[String]): Unit = {
@@ -10,7 +13,17 @@ object Whilec {
               |   y := y * x;
               |   x := x - 1;
               | end """.stripMargin
-    val tokenSeq = apply(code)
-    println(tokenSeq)
+    val tokenSeq = WhileLexer.apply(code)
+    for {
+      tokens <- tokenSeq
+      token  <- tokens
+    } {
+      println(token)
+    }
+
+    val code1  = "10 + 1 * 2;"
+    val tokens = WhileLexer.apply(code1).right.get
+    val ast    = WhileParser.apply(tokens)
+    println(ast)
   }
 }
