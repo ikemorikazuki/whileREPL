@@ -28,7 +28,7 @@ Whilecは「SEMANTICS WITH APPLICATIONS A Formal Introduction」の第二章で�
 
 ## Example
 
-```bash
+```scala
 $While> x := 1;
 state = Map(x -> 2)
 
@@ -44,10 +44,10 @@ state = Map(x -> 16, y -> 3)
 $While> x := 5; y := 1;  while 1 <= x do y := y * x; x := x - 1; end 
 state = Map(x -> 0, y -> 120)
 
-$while> state.refresh
+$While> state.refresh
 state = Map()
 
-$while> :q
+$While> :q
 finish While REPL. SEE YOU AGAIN!
 
 ```
