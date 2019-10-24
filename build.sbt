@@ -11,7 +11,8 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xlint"),
     libraryDependencies ++= Seq(
       "org.scalatest"          %% "scalatest"                % "3.0.8" % "test",
-      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
+      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
+      "jline"                  % "jline"                     % "2.12"
     )
   )
 
