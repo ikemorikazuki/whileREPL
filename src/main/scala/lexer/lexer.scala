@@ -5,7 +5,7 @@ import whilec.{Location, WhileLexerError}
 
 object WhileLexer extends RegexParsers {
   override def skipWhitespace = true
-  override val whiteSpace     = """[\t\r\n" "]+""".r
+  override val whiteSpace     = """[\t\r\n\f\s]+""".r
 
   //
   def apply(code: String): Either[WhileLexerError, List[WhileToken]] = {

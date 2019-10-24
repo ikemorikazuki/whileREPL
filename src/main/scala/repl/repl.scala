@@ -28,10 +28,10 @@ object WhileREPL {
             case Right(tokens) => {
               WhileParser.apply(tokens) match {
                 case Left(parserErr) =>
-                  println(s"${RESET}${BOLD}${RED}ERROR${RESET}: ${parserErr}")
+                  println(s"${RESET}${BOLD}${RED}ERROR${RESET}: ${parserErr}\n")
                 case Right(ast) => {
                   state = evalBigStep(ast, state)
-                  println(s"${RESET}${BOLD}${CYAN}state${RESET} = ${state}")
+                  println(s"${RESET}${BOLD}${CYAN}state${RESET} = ${state}\n")
                 }
               }
             }
