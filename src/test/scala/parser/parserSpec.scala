@@ -10,7 +10,9 @@ class LexerSpec extends FlatSpec with Matchers {
   val two   = NumExp(2)
   val three = NumExp(3)
   val four  = NumExp(4)
+  val ten   = NumExp(10)
   val x     = VarExp("x")
+  val y     = VarExp("y")
   val tt    = BoolExp(true)
   val ff    = BoolExp(false)
 
@@ -31,6 +33,7 @@ class LexerSpec extends FlatSpec with Matchers {
       case Success(result, next) => Right(result)
     }
   }
+
   // 算術式のTEST
   "parse 1" should "NumExp(1)" in {
     val code   = "1"
@@ -111,10 +114,89 @@ class LexerSpec extends FlatSpec with Matchers {
     ast.right.get shouldBe (EqExp(ParenExp(AddExp(one, one)), ParenExp(AddExp(three, three))))
   }
 
-  "parse (1 + 1) = (3 3)" should s"EqExp(ParenExp(AddExp($one,$one),ParenExp(AddExp($three,$three))" in {
+  "parse (1 + 1) <= (3 + 3)" should s"EqExp(ParenExp(AddExp($one,$one),ParenExp(AddExp($three,$three))" in {
+    val code   = "(1 + 1) <=  (3 + 3)"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = parseBExp(tokens)
+    ast.right.get shouldBe (LeExp(ParenExp(AddExp(one, one)), ParenExp(AddExp(three, three))))
+  }
+
+  "parse  true && false" should s"AndExp($tt, $ff)" in {
     val code   = "true && false"
     val tokens = WhileLexer.apply(code).right.get
     val ast    = parseBExp(tokens)
-    ast.right.get shouldBe (EqExp(ParenExp(AddExp(one, one)), ParenExp(AddExp(three, three))))
+    ast.right.get shouldBe (AndExp(tt, ff))
+  }
+
+  "parse  !true" should s"NotExp($tt))" in {
+    val code   = "!true"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = parseBExp(tokens)
+    ast.right.get shouldBe (NotExp(tt))
+  }
+
+  "parse !(false && true) && (1 = 1)" should s"AndExp(NotExp(BParen(AndExp($ff, $tt))), BParen(EqExp($one, $one)))" in {
+    val code   = "!(false && true) && (1 = 1)"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = parseBExp(tokens)
+    ast.right.get shouldBe (AndExp(NotExp(BParen(AndExp(ff, tt))), BParen(EqExp(one, one))))
+  }
+
+  "parse skip" should "SkipStm()" in {
+    val code   = "skip"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (SkipStm())
+  }
+
+  "parse x := 1;" should s"AssignStm(x, $one) " in {
+    val code   = "x := 1;"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (AssignStm("x", one))
+  }
+
+  "parse x := 1;y := 2" should s"SeqStm(AssignStm(x, $one), AssignStm(y, $two))" in {
+    val code   = "x := 1;y := 2;"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (SeqStm(AssignStm("x", one), AssignStm("y", two)))
+  }
+
+  "parse if false then x := 1; else y := 1; end" should s"IfStm(ff, AssignStm(x, $one), AssignStm(y, $one))" in {
+    val code   = "if false then x := 1; else y := 1; end"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (IfStm(ff, AssignStm("x", one), AssignStm("y", one)))
+  }
+
+  "parse while false do x := 1; end" should s"WhileStm($ff,AssignStm(x,$one)))" in {
+    val code   = "while false do x := 1; end"
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (WhileStm(BoolExp(false), AssignStm("x", NumExp(1))))
+  }
+
+  "parse big statements" should s"Right(SeqStm(AssignStm(x,$ten),SeqStm(AssignStm(y,$one),WhileStm(LeExp($ten,$x),SeqStm(AssignStm(y,MulExp($y,$x))),AssignStm(x,SubExp($x,$one)))))))" in {
+    val code   = """x := 10;
+              | y := 1;
+              | while 10 <= x do
+              |   y := y * x; 
+              |   x := x - 1;
+              | end""".stripMargin
+    val tokens = WhileLexer.apply(code).right.get
+    val ast    = WhileParser.apply(tokens)
+    ast.right.get shouldBe (
+      SeqStm(
+        AssignStm("x", ten),
+        SeqStm(
+          AssignStm("y", one),
+          WhileStm(
+            LeExp(ten, x),
+            SeqStm(AssignStm("y", MulExp(y, x)), AssignStm("x", SubExp(x, one)))
+          )
+        )
+      )
+    )
   }
 }
