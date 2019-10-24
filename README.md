@@ -24,7 +24,7 @@ Whilecは「SEMANTICS WITH APPLICATIONS A Formal Introduction」の第二章で�
 
     <block> ::= (<statement>)+
 
-構文解析の合間さを無くすためにwhile規則とif規則にendキーワードを導入した.
+構文解析の曖昧さを無くすためにwhile規則とif規則にendキーワードを導入した.
 
 ## Example
 
