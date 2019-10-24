@@ -39,6 +39,7 @@ object WhileParser extends Parsers {
             l match {
               case ADD ~ f => { operand1 = AddExp(operand1, f) }
               case SUB ~ f => { operand1 = SubExp(operand1, f) }
+              case _       => { operand1 = operand1 } // 警告を無くすために増やしたパターン　絶対にマッチしない
             }
         )
         operand1
@@ -53,7 +54,7 @@ object WhileParser extends Parsers {
         lists.foreach(
           l =>
             l match {
-              case MUL ~ f => { operand1 = MulExp(operand1, f) }
+              case mul ~ f => { operand1 = MulExp(operand1, f) }
             }
         )
         operand1
@@ -89,7 +90,7 @@ object WhileParser extends Parsers {
         lists.foreach(
           l => {
             l match {
-              case AND ~ f => { op = AndExp(op, f) }
+              case and ~ f => { op = AndExp(op, f) }
             }
           }
         )
@@ -113,13 +114,13 @@ object WhileParser extends Parsers {
 
   def eq: Parser[Bexp] = positioned {
     (aExpression ~ EQ ~ aExpression) ^^ {
-      case aex1 ~ EQ ~ aex2 => EqExp(aex1, aex2)
+      case aex1 ~ eqs ~ aex2 => EqExp(aex1, aex2)
     }
   }
 
   def leq: Parser[Bexp] = positioned {
     (aExpression ~ LEQ ~ aExpression) ^^ {
-      case aex1 ~ LEQ ~ aex2 => LeExp(aex1, aex2)
+      case aex1 ~ l ~ aex2 => LeExp(aex1, aex2)
     }
   }
 
@@ -143,7 +144,7 @@ object WhileParser extends Parsers {
     val skip = positioned { SKIP ^^ (_ => SkipStm()) }
     val assign = positioned {
       ident ~ ASSIGN ~ aExpression ~ SEMICOLON ^^ {
-        case IDENTIFIER(i) ~ ASSIGN ~ aExpression ~ SEMICOLON => AssignStm(i, aExpression)
+        case IDENTIFIER(i) ~ ass ~ aExpression ~ sem => AssignStm(i, aExpression)
       }
     }
     skip | assign | ifThen | whileDo
@@ -151,13 +152,13 @@ object WhileParser extends Parsers {
 
   def ifThen: Parser[Stm] = positioned {
     (IF ~ bExpression ~ THEN ~ block ~ ELSE ~ block ~ END) ^^ {
-      case IF ~ bex ~ THEN ~ stms1 ~ ELSE ~ stms2 ~ END => IfStm(bex, stms1, stms2)
+      case i ~ bex ~ th ~ stms1 ~ el ~ stms2 ~ end => IfStm(bex, stms1, stms2)
     }
   }
 
   def whileDo: Parser[Stm] = positioned {
     (WHILE ~ bExpression ~ DO ~ block ~ END) ^^ {
-      case WHILE ~ bex ~ DO ~ stms ~ END => WhileStm(bex, stms)
+      case wh ~ bex ~ d ~ stms ~ end => WhileStm(bex, stms)
     }
   }
 }

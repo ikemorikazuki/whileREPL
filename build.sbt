@@ -8,7 +8,12 @@ ThisBuild / organizationName := "example"
 lazy val root = (project in file("."))
   .settings(
     name := "whilec",
-    scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xlint"),
+    scalacOptions ++= Seq(
+      "-deprecation",
+      "-feature",
+      "-unchecked",
+      "-Xlint"
+    ),
     libraryDependencies ++= Seq(
       "org.scalatest"          %% "scalatest"                % "3.0.8" % "test",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2",
