@@ -1,5 +1,5 @@
-# Whilec
-Whilecは「SEMANTICS WITH APPLICATIONS A Formal Introduction」の第二章で定義されたWhile言語のインタプリターです。
+# WhileREPL
+WhileREPLは「SEMANTICS WITH APPLICATIONS A Formal Introduction」の第二章で定義されたWhile言語のインタプリターです。
 
 ## While`s BNF
     <arithmeticexpression> ::= n 
