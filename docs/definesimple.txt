@@ -1,22 +1,21 @@
-<expression> ::= n 
+<arithmeticexpression> ::= n 
                 | x 
-                | <expression> "+" <expression> 
-                | <expression> "-" <expression> 
-                | <expression> "*" <expression>
-                | "(" <expression> ")"
+                | <arithmetic expression> "+" <arithmetic expression> 
+                | <arithmetic expression> "-" <arithmetic expression> 
+                | <arithmetic expression> "*" <arithmetic expression>
+                | "(" <arithmetic expression> ")"
 
 <boolean expression> ::= "true" 
                         | "false" 
-                        | <expression> "=" <expression> 
-                        | <expression> "<=" <expression> 
+                        | <arithmetic expression> "=" <arithmetic expression> 
+                        | <arithmetic expression> "<=" <arithmetic expression> 
                         | "!" <boolean expression> 
                         | <boolean expression> "&&" <boolean expression>
                         | "(" <boolean expression> ")"
 
-<statement> ::= x ":=" <expression> ";" 
+<statement> ::= x ":=" <arithmetic expression> ";" 
                         | "skip" 
-                        //| <statement> <statement>
-                        | "if" <boolean expression> "then" <statement> "else" <statement> "end"
-                        | "while" <boolean expression> "do" <statement> "end"
+                        | "if" <boolean expression> "then" <block> "else" <block> "end"
+                        | "while" <boolean expression> "do" <block> "end"
 
 <block> ::= (<statement>)+

@@ -5,12 +5,7 @@ y := (1 + 1) * 2
 z := (2 + 3) * (1 + 2)
 w := 1 + 2 * 3 + (1 + 2) * -10 // マイナス符号は数字と離さないで！ - 10　はエラー
 
-if true then
-    x := 1;
-    y := 3;
-else
-    x := 4;
-end
+if true then  x := 1; y := 3; else x := 4; end
 
 x := 2;while x <= 10 do x := x * x; end
 
