@@ -1,7 +1,7 @@
 package whilec
 //import scala.collection.script.Location
 
-sealed trait WhileError
+sealed abstract class WhileError
 case class WhileLexerError(location: Location, msg: String)  extends WhileError
 case class WhileParserError(location: Location, msg: String) extends WhileError
 

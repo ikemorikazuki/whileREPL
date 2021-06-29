@@ -47,6 +47,9 @@ state = Map(x -> 0, y -> 120)
 $While> state.refresh
 state = Map()
 
+$While> fib1 := 1; fib2 := 1; count := 1; while count <= 40 do tmp := fib1; fib1 := fib2; fib2 := fib1 + tmp; count := count + 1; end
+state = Map(fib1 -> 165580141, fib2 -> 267914296, count -> 41, tmp -> 102334155)
+
 $While> :q
 finish While REPL. SEE YOU AGAIN!
 
